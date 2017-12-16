@@ -11,5 +11,9 @@ In order to compile this software, you will need to have [Magick++](https://www.
 
 When you have done all the previous steps, run either `cmake-gui` or `cmake` to configure the project. Then compile it.
 
+## Todo
+- [ ] Add custom image size support
+- [ ] Add legend support
+
 ## License
 This program is released under the GPL3 license. For further information, please read LICENSE file.

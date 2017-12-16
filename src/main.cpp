@@ -16,8 +16,7 @@ const Color getColor(string s) {
         return Color(gSettings[s]);
 }
 const Color getColor(int i) {
-        if(i == -1)
-                return Color(0,0,0,QuantumRange);
+        if(i == -1) return Color(0,0,0,QuantumRange);
         ostringstream oss;
         oss << i;
         return getColor(oss.str());
@@ -54,7 +53,7 @@ void createLines(Image& background, vector<vector<int>> relations) {
         }
 }
 const vector<string> split(const string& s, const char& c) {
-	string buff{""};
+	string buff;
 	vector<string> v;
 	
 	for(auto n:s) {
@@ -68,18 +67,16 @@ const vector<string> split(const string& s, const char& c) {
 	return v;
 }
 bool readFile(string filename, vector<Image>& images, vector<vector<int>>& relations) {
-        ifstream ifs;
-        ifs.open(filename.c_str());
-        if(!ifs)
-                return false;
+        ifstream ifs (filename.c_str());
+        if(!ifs) return false;
+
         string str;
 
         // IMAGES
         getline(ifs, str);
         vector<string> persons = split(str, '|');
         for(auto s : persons) {
-                if(s == "")
-                        continue;
+                if(s.empty()) continue;
                 Image img;
                 try {
                         img.read(s + string(".png"));
@@ -87,7 +84,7 @@ bool readFile(string filename, vector<Image>& images, vector<vector<int>>& relat
                         img.read(gSettings["default"]);
                 }
                 img.resize(Geometry(200,200));                
-                images.push_back(img);
+               images.push_back(img);
         }
 
         // RELATIONS
@@ -102,20 +99,14 @@ bool readFile(string filename, vector<Image>& images, vector<vector<int>>& relat
         return true;
 }
 bool readSetting(string filename) {
-        ifstream ifs;
-        ifs.open(filename.c_str());
-        if(!ifs)
-                return false;
+        ifstream ifs (filename.c_str());
+        if(!ifs) return false;
 
         string str;
         while(getline(ifs, str)) {
-                if(str == "")
-                        continue;
                 vector<string> parts = split(str,' ');
-                if(parts.size() != 2)
-                        continue;
-
-                gSettings[parts[0]] = parts[1];
+                if(!parts.size() != 2 && !str.empty())
+                        gSettings[parts[0]] = parts[1];
         }
         return true;
 }
@@ -127,8 +118,8 @@ int main(int argc,char **argv)  {
                 vector<vector<int>> relations;
 
                 string file;
-                /*                if(argc == 2)  file = argv[1];
-                                  else*/          file = "settings.txt";
+                if(argc == 2) file = argv[1];
+                else          file = "settings.txt";
                 if(!readSetting(file) || !readFile(gSettings["data"], images, relations)) {
                         cout << "No file specified, not doing anything\n";
                         return 0;
