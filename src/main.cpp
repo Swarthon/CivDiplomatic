@@ -67,9 +67,11 @@ const vector<string> split(const string& s, const char& c) {
 	v.push_back(buff);	
 	return v;
 }
-void readFile(string filename, vector<Image>& images, vector<vector<int>>& relations) {
+bool readFile(string filename, vector<Image>& images, vector<vector<int>>& relations) {
         ifstream ifs;
         ifs.open(filename.c_str());
+        if(!ifs)
+                return false;
         string str;
 
         // IMAGES
@@ -84,7 +86,7 @@ void readFile(string filename, vector<Image>& images, vector<vector<int>>& relat
                 } catch(Exception &e) {
                         img.read(gSettings["default"]);
                 }
-                img.resize(Geometry(100,100));                
+                img.resize(Geometry(200,200));                
                 images.push_back(img);
         }
 
@@ -97,10 +99,13 @@ void readFile(string filename, vector<Image>& images, vector<vector<int>>& relat
                         else               relations[i].push_back(stoi(parts[j]));
                 }
         }
+        return true;
 }
-void readSetting(string filename) {
+bool readSetting(string filename) {
         ifstream ifs;
         ifs.open(filename.c_str());
+        if(!ifs)
+                return false;
 
         string str;
         while(getline(ifs, str)) {
@@ -112,6 +117,7 @@ void readSetting(string filename) {
 
                 gSettings[parts[0]] = parts[1];
         }
+        return true;
 }
 int main(int argc,char **argv)  { 
         InitializeMagick(*argv);
@@ -121,10 +127,12 @@ int main(int argc,char **argv)  {
                 vector<vector<int>> relations;
 
                 string file;
-                if(argc > 1)  file = argv[1];
-                else          file = "settings.txt";
-                readSetting(file);
-                readFile(gSettings["data"], images, relations);
+                /*                if(argc == 2)  file = argv[1];
+                                  else*/          file = "settings.txt";
+                if(!readSetting(file) || !readFile(gSettings["data"], images, relations)) {
+                        cout << "No file specified, not doing anything\n";
+                        return 0;
+                }
                 
                 Image image(Geometry(2000,2000), getColor("background"));
                 createLines(image, relations);

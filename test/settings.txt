@@ -1,0 +1,8 @@
+1 green
+2 red
+
+background white
+
+default default.png
+data test.csv
+output image.png

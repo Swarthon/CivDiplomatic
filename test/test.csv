@@ -1,0 +1,6 @@
+|Linux|FSF|Microsoft|Apple|Google
+Linux||1|2|2|2
+FSF|1||2|2|2
+Microsoft|2|2||1|2
+Apple|2|2|1||2
+Google|2|2|2|2|
